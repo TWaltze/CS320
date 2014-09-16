@@ -53,7 +53,7 @@ def directions(tokens):
 
 ######### QUESTION 2 #########
 def number(tokens, top = True):
-	if re.match(r"^([1-9][0-9]*)$", tokens[0]):
+	if re.match(r"^(-?[1-9][0-9]*)$", tokens[0]):
 		return (int(tokens[0]), tokens[1:])
 
 def variable(tokens, top = True):
