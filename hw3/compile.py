@@ -28,8 +28,28 @@ def compileTerm(env, t, heap):
 				inst = "set {} {}".format(str(heap), num)
 
 				return ([inst], heap, heap)
+			elif label == "Plus":
+				print("enter plus")
+				print("children", children)
+				print("\n")
+				(instLeft, addrLeft, heapLeft) = compileTerm(env, children[0], heap)
+				(instRight, addrRight, heapRight) = compileTerm(env, children[1], heapLeft)
+
+				heapPlus = heapRight + 1
+				instPlus = \
+					copy(addrLeft, 1) +\
+					copy(addrRight, 2) +[\
+					"add"] +\
+					copy(0, heapPlus)
+
+				return (instLeft + instRight + instPlus, heapPlus, heapPlus)
 			elif label == "Variable":
-				blah = lbah
+				x = children[0]
+				if x in env:
+					return ([], env[x], heap)
+				else:
+					print(x + " is unbound.")
+					exit()
 
 def compileFormula(env, f, heap):
 	print("enter formula")
@@ -51,7 +71,14 @@ def compileFormula(env, f, heap):
 	if type(f) == Node:
 		for label in f:
 			children = f[label]
-			if label == "Not":
+			if label == "Variable":
+				x = children[0]
+				if x in env:
+					return ([], env[x], heap)
+				else:
+					print(x + " is unbound.")
+					exit()
+			elif label == "Not":
 				# Compile the subtree f to obtain the list of
 				# instructions that computes the value represented
 				# by f.
@@ -62,17 +89,20 @@ def compileFormula(env, f, heap):
 				# location in accordance with the definition of the
 				# Not operation.
 				fresh = freshStr();
-				instsNot = \
-				   ["branch setZero{} {}".format(fresh, str(heap)),\
+				instsNot = [\
+					"branch setZero{} {}".format(fresh, str(heap)),\
 					"set " + str(heap) + " 1",\
 					"branch finish" + fresh,\
 					"label setZero" + fresh,\
 					"set " + str(heap) + " 0",\
 					"label finish" + fresh\
-				   ]
+				]
 
 				return (insts + instsNot, heap, heap)
 			elif label == "Or":
+				print("enter or")
+				print("children", children)
+				print("\n")
 				# Compile the two subtrees and get the instructions
 				# lists as well as the addresses in which the results
 				# of computing the two subtrees would be stored if someone
@@ -88,20 +118,22 @@ def compileFormula(env, f, heap):
 				# Add instructions that compute the result of the
 				# Or operation.
 				fresh = freshStr();
-				instsOr = [\
-					"copy " + str(addr1) + " 1",\
-					"copy " + str(addr2) + " 2",\
-					"add",\
+				instsOr = \
+					copy(addr1, 1) +\
+					copy(addr2, 2) +\
+					["add",\
 					"branch setOne" + fresh + " 0",\
 					"goto finish" + fresh,\
 					"label setOne" + fresh,\
 					"set 0 1",\
-					"label finish" + fresh,\
-					"copy 0 " + str(heap4)\
-				]
+					"label finish" + fresh] +\
+					copy(0, heap4)
 
 				return (insts1 + insts2 + instsOr, heap4, heap4)
 			elif label == "And":
+				print("enter and")
+				print("children", children)
+				print("\n")
 				f1 = children[0]
 				f2 = children[1]
 				(insts1, addr1, heap2) = compileFormula(env, f1, heap)
@@ -128,6 +160,9 @@ def compileFormula(env, f, heap):
 					copy(0, heap4)
 
 				return (insts1 + insts2 + instsAnd, heap4, heap4)
+
+def compileExpression(env, e, heap):
+	return compileTerm(env, e, heap) or compileFormula(env, e, heap)
 
 def compileProgram(env, s, heap):
 	print("enter program")
@@ -163,6 +198,91 @@ def compileProgram(env, s, heap):
 				print("\n")
 
 				return (envRest, insts + instsPrint + instsRest, heapRest)
+			elif label == "Assign":
+				print("enter assign")
+				print("children", children)
+				print("\n")
+
+				name = children[0]["Variable"][0]
+				expression = children[1]
+				rest = children[2]
+				print("var {} = {}\n".format(name, expression))
+
+				(insts, addr, heap) = compileTerm(env, expression, heap) or compileFormula(env, expression, heap)
+				print("insts", insts)
+				print("addr", addr)
+				print("heap", heap)
+				print("\n")
+				# If updating a preexisting variable,
+				# don't reassign to heap. Instead,
+				# update current heap location
+				if name in env:
+					instAssign = copy(heap, env[name])
+				else:
+					env[name] = addr
+					instAssign = []
+				print("env", env)
+
+				(envRest, instsRest, heapRest) = compileProgram(env, rest, heap)
+
+				return (envRest, insts + instAssign + instsRest, heapRest)
+			elif label == "If":
+				print("enter if")
+				print("children", children)
+				print("\n")
+
+				condition = children[0]
+				body = children[1]
+				rest = children[2]
+
+				(instCond, addrCond, heapCond) = compileExpression(env, condition, heap)
+				(envBody, instBody, heapBody) = compileProgram(env, body, heapCond)
+				print("instCond", instCond)
+				print("instBody", instBody)
+
+				fresh = freshStr()
+				instIf = [\
+					"branch startIf{} {}".format(fresh, addrCond),\
+					"goto endIf" + fresh,\
+					"label startIf" + fresh] +\
+					instBody + [\
+					"label endIf" + fresh
+				]
+
+				(envRest, instRest, heapRest) = compileProgram(envBody, rest, heapBody)
+
+				return (envRest, instCond + instIf + instRest, heapRest)
+			elif label == "While":
+				print("enter while")
+				print("children", children)
+				print("\n")
+
+				condition = children[0]
+				body = children[1]
+				rest = children[2]
+
+				(instCond, addrCond, heapCond) = compileExpression(env, condition, heap)
+				(envBody, instBody, heapBody) = compileProgram(env, body, heapCond)
+				print("instCond", instCond)
+				print("instBody", instBody)
+
+				fresh = freshStr()
+				instIf = [\
+					"label whileCondition" + fresh,\
+					"branch startWhile{} {}".format(fresh, addrCond),\
+					"goto endWhile" + fresh,\
+					"label startWhile" + fresh] +\
+					instBody + [\
+					"goto whileCondition" + fresh,\
+					"label endWhile" + fresh
+				]
+
+				(envRest, instRest, heapRest) = compileProgram(envBody, rest, heapBody)
+
+				return (envRest, instCond + instIf + instRest, heapRest)
+
+
+
 
 def compile(s):
 	startOfHeap = 8
