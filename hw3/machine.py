@@ -166,10 +166,12 @@ def decrementAddr(addr):
 	return addAddr(addr, -1)
 
 def call(name):
+	calls = decrement(7) + copyFromToAddr(6, 7) + add(7, 1) + increment(7)
+
 	return \
 		decrement(7) +\
 		copyFromToAddr(6, 7) +\
-		incrementAddr(7) + [\
+		add(7, len(calls) + 1) + [\
 		"goto " + name] +\
 		increment(7)
 
@@ -178,8 +180,9 @@ def procedure(name, body):
 		"goto " + name + "End",\
 		"label " + name] +\
 		body + [\
-		"jump 7"
+		"jump 7",\
 		"label " + name + "End",\
 	]
 
+# exec(open("hw3-tests.py").read())
 # eof

@@ -280,9 +280,36 @@ def compileProgram(env, s, heap):
 				(envRest, instRest, heapRest) = compileProgram(envBody, rest, heapBody)
 
 				return (envRest, instCond + instIf + instRest, heapRest)
+			elif label == "Procedure":
+				print("enter procedure")
+				print("children", children)
+				print("\n")
 
+				name = children[0]["Variable"][0]
+				body = children[1]
+				rest = children[2]
 
+				(envBody, instBody, heapBody) = compileProgram(env, body, heap)
 
+				instProcedure = procedure(name, instBody)
+
+				(envRest, instRest, heapRest) = compileProgram(envBody, rest, heapBody)
+
+				return (envRest, instProcedure + instRest, heapRest)
+			elif label == "Call":
+				print("enter call")
+				print("children", children)
+				print("\n")
+
+				name = children[0]["Variable"][0]
+				rest = children[1]
+
+				instCall = call(name)
+				print("instCall", instCall)
+
+				(envRest, instRest, heapRest) = compileProgram(env, rest, heap)
+
+				return (envRest, instCall + instRest, heapRest)
 
 def compile(s):
 	startOfHeap = 8
