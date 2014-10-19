@@ -70,7 +70,7 @@ def evalFormula(env, f):
 				# Don't eval second term
 				# if first is already false
 				if not v1:
-					return False;
+					return False
 
 				f2 = children[1]
 				v2 = evalFormula(env, f2)
@@ -84,7 +84,7 @@ def evalFormula(env, f):
 				# Don't eval second term
 				# if first is already true
 				if v1:
-					return True;
+					return True
 
 				f2 = children[1]
 				v2 = evalFormula(env, f2)

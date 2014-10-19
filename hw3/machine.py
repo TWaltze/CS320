@@ -19,22 +19,22 @@ def simulate(s):
 		inst = instructions[control]
 
 		# Handle the instruction.
-		if inst[0] == 'label':
+		if inst[0] == "label":
 			pass
-		if inst[0] == 'goto':
-			control = instructions.index(['label', inst[1]])
+		if inst[0] == "goto":
+			control = instructions.index(["label", inst[1]])
 			continue
-		if inst[0] == 'branch' and mem[int(inst[2])]:
-			control = instructions.index(['label', inst[1]])
+		if inst[0] == "branch" and mem[int(inst[2])]:
+			control = instructions.index(["label", inst[1]])
 			continue
-		if inst[0] == 'jump':
+		if inst[0] == "jump":
 			control = mem[int(inst[1])]
 			continue
-		if inst[0] == 'set':
+		if inst[0] == "set":
 			mem[int(inst[1])] = int(inst[2])
-		if inst[0] == 'copy':
+		if inst[0] == "copy":
 			mem[mem[4]] = mem[mem[3]]
-		if inst[0] == 'add':
+		if inst[0] == "add":
 			mem[0] = mem[1] + mem[2]
 
 		# Push the output address's content to the output.
@@ -52,9 +52,9 @@ def simulate(s):
 # at address <frm> to address <to>
 def copy(frm, to):
 	return [\
-		'set 3 ' + str(frm),\
-		'set 4 ' + str(to),\
-		'copy'\
+		"set 3 " + str(frm),\
+		"set 4 " + str(to),\
+		"copy"\
 	]
 
 # Copy int value stored at address <frm>
@@ -75,19 +75,19 @@ def copy(frm, to):
 def copyFromToAddr(frm, addr):
 	return \
 		copy(addr, 4) + [\
-		'set 3 ' + str(frm),\
-		'copy'
+		"set 3 " + str(frm),\
+		"copy"
 	]
 
 def add(addr, amount):
 	return \
 		copy(addr, 1) + [\
-		'set 2 ' + str(amount),\
-		'add'] +\
+		"set 2 " + str(amount),\
+		"add"] +\
 		copy(0, addr) + [\
-		'set 0 0',\
-		'set 1 0',\
-		'set 2 0'\
+		"set 0 0",\
+		"set 1 0",\
+		"set 2 0"\
 	]
 
 # Add <amount> to the value at the address
@@ -136,16 +136,16 @@ set 2 0
 def addAddr(addr, amount):
 	return \
 		copy(addr, 3) + [\
-		'set 4 1',\
-		'copy',\
-		'set 2 ' + str(amount),\
-		'add'] + \
+		"set 4 1",\
+		"copy",\
+		"set 2 " + str(amount),\
+		"add"] + \
 		copy(addr, 4) + [\
-		'set 3 0',\
-		'copy',\
-		'set 0 0',\
-		'set 1 0',\
-		'set 2 0'\
+		"set 3 0",\
+		"copy",\
+		"set 0 0",\
+		"set 1 0",\
+		"set 2 0"\
 	]
 
 
@@ -170,16 +170,16 @@ def call(name):
 		decrement(7) +\
 		copyFromToAddr(6, 7) +\
 		incrementAddr(7) + [\
-		'goto ' + name] +\
+		"goto " + name] +\
 		increment(7)
 
 def procedure(name, body):
 	return [\
-		'goto ' + name + 'End',\
-		'label ' + name] +\
+		"goto " + name + "End",\
+		"label " + name] +\
 		body + [\
-		'jump 7'
-		'label ' + name + 'End',\
+		"jump 7"
+		"label " + name + "End",\
 	]
 
 # eof
