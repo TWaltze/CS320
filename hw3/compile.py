@@ -10,28 +10,17 @@ def freshStr():
 	return str(random.randint(0,100000))
 
 def compileTerm(env, t, heap):
-	print("enter term")
-	print("env", env)
-	print("t", t)
-	print("heap", heap)
-	print("\n")
 	if type(t) == Node:
 		for label in t:
 			children = t[label]
 
 			if label == "Number":
-				print("enter number")
-				print("children", children)
-				print("\n")
 				num = children[0]
 				heap += 1;
 				inst = "set {} {}".format(str(heap), num)
 
 				return ([inst], heap, heap)
 			elif label == "Plus":
-				print("enter plus")
-				print("children", children)
-				print("\n")
 				(instLeft, addrLeft, heapLeft) = compileTerm(env, children[0], heap)
 				(instRight, addrRight, heapRight) = compileTerm(env, children[1], heapLeft)
 
@@ -52,11 +41,6 @@ def compileTerm(env, t, heap):
 					exit()
 
 def compileFormula(env, f, heap):
-	print("enter formula")
-	print("env", env)
-	print("f", f)
-	print("heap", heap)
-	print("\n")
 	if type(f) == Leaf:
 		if f == "True":
 			heap += 1
@@ -100,9 +84,6 @@ def compileFormula(env, f, heap):
 
 				return (insts + instsNot, heap, heap)
 			elif label == "Or":
-				print("enter or")
-				print("children", children)
-				print("\n")
 				# Compile the two subtrees and get the instructions
 				# lists as well as the addresses in which the results
 				# of computing the two subtrees would be stored if someone
@@ -131,9 +112,6 @@ def compileFormula(env, f, heap):
 
 				return (insts1 + insts2 + instsOr, heap4, heap4)
 			elif label == "And":
-				print("enter and")
-				print("children", children)
-				print("\n")
 				f1 = children[0]
 				f2 = children[1]
 				(insts1, addr1, heap2) = compileFormula(env, f1, heap)
@@ -165,11 +143,6 @@ def compileExpression(env, e, heap):
 	return compileTerm(env, e, heap) or compileFormula(env, e, heap)
 
 def compileProgram(env, s, heap):
-	print("enter program")
-	print("env", env)
-	print("s", s)
-	print("heap", heap)
-	print("\n")
 	if type(s) == Leaf:
 		if s == "End":
 			return (env, [], heap)
@@ -177,42 +150,21 @@ def compileProgram(env, s, heap):
 		for label in s:
 			children = s[label]
 			if label == "Print":
-				print("enter print")
-				print("children", children)
-				print("\n")
-				f = children[0]
+				expression = children[0]
 				rest = children[1]
-				(insts, addr, heap) = compileTerm(env, f, heap) or compileFormula(env, f, heap)
-				print("insts", insts)
-				print("addr", addr)
-				print("heap", heap)
-				print("\n")
+				(insts, addr, heap) = compileExpression(env, expression, heap)
 
 				instsPrint = copy(heap, 5)
-				print("instsPrint", instsPrint)
 
 				(envRest, instsRest, heapRest) = compileProgram(env, rest, heap)
-				print("envRest", envRest)
-				print("instsRest", instsRest)
-				print("heapRest", heapRest)
-				print("\n")
 
 				return (envRest, insts + instsPrint + instsRest, heapRest)
 			elif label == "Assign":
-				print("enter assign")
-				print("children", children)
-				print("\n")
-
 				name = children[0]["Variable"][0]
 				expression = children[1]
 				rest = children[2]
-				print("var {} = {}\n".format(name, expression))
 
-				(insts, addr, heap) = compileTerm(env, expression, heap) or compileFormula(env, expression, heap)
-				print("insts", insts)
-				print("addr", addr)
-				print("heap", heap)
-				print("\n")
+				(insts, addr, heap) = compileExpression(env, expression, heap)
 				# If updating a preexisting variable,
 				# don't reassign to heap. Instead,
 				# update current heap location
@@ -221,24 +173,17 @@ def compileProgram(env, s, heap):
 				else:
 					env[name] = addr
 					instAssign = []
-				print("env", env)
 
 				(envRest, instsRest, heapRest) = compileProgram(env, rest, heap)
 
 				return (envRest, insts + instAssign + instsRest, heapRest)
 			elif label == "If":
-				print("enter if")
-				print("children", children)
-				print("\n")
-
 				condition = children[0]
 				body = children[1]
 				rest = children[2]
 
 				(instCond, addrCond, heapCond) = compileExpression(env, condition, heap)
 				(envBody, instBody, heapBody) = compileProgram(env, body, heapCond)
-				print("instCond", instCond)
-				print("instBody", instBody)
 
 				fresh = freshStr()
 				instIf = [\
@@ -253,18 +198,12 @@ def compileProgram(env, s, heap):
 
 				return (envRest, instCond + instIf + instRest, heapRest)
 			elif label == "While":
-				print("enter while")
-				print("children", children)
-				print("\n")
-
 				condition = children[0]
 				body = children[1]
 				rest = children[2]
 
 				(instCond, addrCond, heapCond) = compileExpression(env, condition, heap)
 				(envBody, instBody, heapBody) = compileProgram(env, body, heapCond)
-				print("instCond", instCond)
-				print("instBody", instBody)
 
 				fresh = freshStr()
 				instIf = [\
@@ -281,10 +220,6 @@ def compileProgram(env, s, heap):
 
 				return (envRest, instCond + instIf + instRest, heapRest)
 			elif label == "Procedure":
-				print("enter procedure")
-				print("children", children)
-				print("\n")
-
 				name = children[0]["Variable"][0]
 				body = children[1]
 				rest = children[2]
@@ -297,15 +232,10 @@ def compileProgram(env, s, heap):
 
 				return (envRest, instProcedure + instRest, heapRest)
 			elif label == "Call":
-				print("enter call")
-				print("children", children)
-				print("\n")
-
 				name = children[0]["Variable"][0]
 				rest = children[1]
 
 				instCall = call(name)
-				print("instCall", instCall)
 
 				(envRest, instRest, heapRest) = compileProgram(env, rest, heap)
 
@@ -318,6 +248,4 @@ def compile(s):
 	]
 
 	(env, insts, heap) = compileProgram({}, tokenizeAndParse(s), startOfHeap)
-	print("final instructions", setup + insts)
-	print("\n")
 	return setup + insts
