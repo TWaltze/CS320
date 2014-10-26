@@ -78,17 +78,21 @@ def execute(env, s):
 				(env, o) = execute(env, rest)
 				return (env, o)
 			elif label == "For":
-				var = children[0]
+				var = children[0]["Variable"][0]
 				body = children[1]
 				rest = children[2]
 
 				# first loop
+				env[var] = 0
 				(env, o1) = execute(env, body)
 				# second loop
+				env[var] = 1
 				(env, o2) = execute(env, body)
 				# third loop
+				env[var] = 2
 				(env, o3) = execute(env, body)
 
+				del env[var]
 				(env, o4) = execute(env, rest)
 				return (env, o1 + o2 + o3 + o4)
 
@@ -98,7 +102,7 @@ def interpret(s):
 
 '''
 Input:
-assign x := [true, 2, 5]; assign y := [@ x [0], @ x [1 + 1] + @ x [1], false]; print @ y [0]; print @ y [1]; print @ y [2]; assign x := [1, 1, 1]; print @ x [0]; print @ x [1]; print @ x [2]; for x { for y { print @ y [1]; } print true; }
+assign x := [true, 2, 5]; assign y := [@ x [0], @ x [1 + 1] + @ x [1], false]; print @ y [0]; print @ y [1]; print @ y [2]; assign x := [1, 1, 1]; print @ x [0]; print @ x [1]; print @ x [2]; for i { print i; for j { print @ y [j]; } }
 
 Expanded:
 assign x := [true, 2, 5];
@@ -116,21 +120,21 @@ print @ x [1];
 print @ x [2];
 # 1, 1, 1
 
-for x {
-	for y {
-		print @ y [1];
-		# true
-		# OR
-		# 1
+for i {
+	print i;
+	for j {
+		print @ y [j];
 	}
-	print true;
 }
+# 0, true, 7, false, 1, true, 7, false, 2, true, 7, false
+# OR
+# 0, 1, 2, false, 1, 1, 2, false, 2, 1, 2, false
 
-Output: true, 7, false, 1, 1, 1, 7, 7, 7, true, 7, 7, 7, true, 7, 7, 7, true
+Output: true, 7, false, 1, 1, 1, 0, true, 7, false, 1, true, 7, false, 2, true, 7, false
 
 OR
 
-Output: true, 7, false, 1, 1, 1, 2, 2, 2, true, 2, 2, 2, true, 2, 2, 2, true
+Output: true, 7, false, 1, 1, 1, 0, 1, 2, false, 1, 1, 2, false, 2, 1, 2, false
 '''
 
 #eof
