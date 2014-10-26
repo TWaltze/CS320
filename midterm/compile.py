@@ -19,45 +19,48 @@ Leaf = str
 Node = dict
 
 def freshStr():
-    return str(randint(0,10000000))
+	return str(randint(0,10000000))
 
 def compileExpression(env, e, heap):
-    if type(e) == Node:
-        for label in e:
-            children = e[label]
-            if label == 'Number':
-                n = children[0]
-                heap = heap + 1
-                return (['set ' + str(heap) + ' ' + str(n)], heap, heap)
+	if type(e) == Node:
+		for label in e:
+			children = e[label]
+			if label == 'Number':
+				n = children[0]
+				heap = heap + 1
+				return (['set ' + str(heap) + ' ' + str(n)], heap, heap)
 
-    pass # Complete 'True', 'False', 'Array', and 'Plus' cases for Problem #3.
+	pass # Complete 'True', 'False', 'Array', and 'Plus' cases for Problem #3.
 
 def compileProgram(env, p, heap = ???): # Set initial heap default address.
-    if type(s) == Leaf:
-        if s == 'End':
-            return (env, [], heap)
+	if type(s) == Leaf:
+		if s == 'End':
+			return (env, [], heap)
 
-    if type(s) == Node:
-        for label in s:
-            children = s[label]
-            if label == 'Print':
-                [e, p] = children
-                (instsE, addr, heap) = compileExpression(env, e, heap)
-                (env, instsP, heap) = compileProgram(env, p, heap)
-                return (env, instsE + copy(addr, 5) + instsP, heap)
+	if type(s) == Node:
+		for label in s:
+			children = s[label]
+			if label == 'Print':
+				[e, p] = children
+				(instsE, addr, heap) = compileExpression(env, e, heap)
+				(env, instsP, heap) = compileProgram(env, p, heap)
+				return (env, instsE + copy(addr, 5) + instsP, heap)
 
-    pass # Complete 'Assign' case for Problem #3.
+	pass # Complete 'Assign' case for Problem #3.
 
 def compile(s):
-    p = tokenizeAndParse(s)
+	p = tokenizeAndParse(s)
 
-    # Add call to type checking algorithm for Problem #4.
-    # Add calls to optimization algorithms for Problem #3.
+	# Add call to type checking algorithm for Problem #4.
 
-    (env, insts, heap) = compileProgram({}, p)
-    return insts
+	# Add calls to optimization algorithms for Problem #3.
+	op = foldConstants(p)
+	op = unrollLoops(op)
+
+	(env, insts, heap) = compileProgram({}, op)
+	return insts
 
 def compileAndSimulate(s):
-    return simulate(compile(s))
+	return simulate(compile(s))
 
 #eof
