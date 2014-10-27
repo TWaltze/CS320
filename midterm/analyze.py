@@ -29,7 +29,7 @@ def typeExpression(env, e):
 
             elif label == 'Array':
                 [x, e] = children
-                x = var['Variable'][0]
+                x = x['Variable'][0]
                 if x in env and env[x] == 'Array' and typeExpression(env, e) == 'Number':
                     return 'Number'
 
