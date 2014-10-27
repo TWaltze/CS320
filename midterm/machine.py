@@ -17,11 +17,11 @@ def simulate(s):
     outputs = []
     while control < len(instructions):
         # Update the memory address for control.
-        mem[6] = control 
-        
+        mem[6] = control
+
         # Retrieve the current instruction.
         inst = instructions[control]
-        
+
         # Handle the instruction.
         if inst[0] == 'label':
             pass
@@ -59,7 +59,7 @@ def copy(frm, to):
       'set 4 ' + str(to),\
       'copy'\
    ]
-   
+
 def copyToRef(frm, refTo):
    return [\
       'set 3 ' + str(refTo),\
