@@ -13,6 +13,7 @@ from random import randint
 exec(open('parse.py').read())
 exec(open('interpret.py').read())
 exec(open('optimize.py').read())
+exec(open('analyze.py').read())
 exec(open('machine.py').read())
 
 Leaf = str
@@ -109,14 +110,15 @@ def compileProgram(env, s, heap = 8): # Set initial heap default address.
 
 def compile(s):
 	p = tokenizeAndParse(s)
+
 	# Add call to type checking algorithm for Problem #4.
+	if typeProgram({}, p) != None:
+		# Add calls to optimization algorithms for Problem #3.
+		op = foldConstants(p)
+		op = unrollLoops(op)
 
-	# Add calls to optimization algorithms for Problem #3.
-	op = foldConstants(p)
-	op = unrollLoops(op)
-
-	(env, insts, heap) = compileProgram({}, op)
-	return insts
+		(env, insts, heap) = compileProgram({}, op)
+		return insts
 
 def compileAndSimulate(s):
 	return simulate(compile(s))

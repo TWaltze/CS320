@@ -37,15 +37,17 @@ def simulate(s):
             continue
         if inst[0] == 'set':
             mem[int(inst[1])] = int(inst[2])
+            if int(inst[1]) == 5:
+                outputs.append(mem[5])
+                mem[5] = -1
         if inst[0] == 'copy':
+            dst = mem[4]
             mem[mem[4]] = mem[mem[3]]
+            if dst == 5:
+                outputs.append(mem[5])
+                mem[5] = -1
         if inst[0] == 'add':
             mem[0] = mem[1] + mem[2]
-
-        # Push the output address's content to the output.
-        if mem[5] > -1:
-            outputs.append(mem[5])
-            mem[5] = -1
 
         # Move control to the next instruction.
         control = control + 1
