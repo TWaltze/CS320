@@ -13,7 +13,7 @@ def check(name, function, inputs_result_pairs):
 	if type(name) == str:
 		prefix = name + '('
 		suffix = ')'
-	
+
 	passed = 0
 	for (inputs, result) in inputs_result_pairs:
 		try:
@@ -33,7 +33,7 @@ def check(name, function, inputs_result_pairs):
 
 ############################################################
 # The tests.
-
+'''
 print("Problem #1, part (a), subst()...")
 try: subst
 except: print("The subst() function is not defined.\n")
@@ -45,6 +45,7 @@ else: check('subst', subst, [\
 	([{"z":{"Number":[2]}}, {"Plus":[{"Variable":['y']}, {"Variable":['z']}]}], {"Plus":[{"Variable":['y']}, {"Number":[2]}]})\
 	])
 '''
+
 print("Problem #1, part (b), unify()...")
 try: unify
 except: print("The unify() function is not defined.\n")
@@ -63,6 +64,7 @@ else: check(('unifying... ', ' ...'), lambda s1,s2: unify(parser(grammar, 'expre
 	(["Or x y", "Or True False"], {"x":{'ConBase': ['True']}, "y":{'ConBase': ['False']}})\
 	])
 
+'''
 print("Problem #2, part (b), evaluate()...")
 try: evaluate
 except: print("The evaluate() function is not defined.\n")

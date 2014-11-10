@@ -51,7 +51,7 @@ def parser(grammar, topNonterminal):
                         else:
                             return ({label:es} if len(es) > 0 else label, tokens)
     return (lambda tokens: (lambda r: r[0] if not r is None else None) (parse(tokens)))
-    
+
 grammar = [\
     {'declaration': [\
       ('Function', ['variable', '(', 'pattern' , ')', '=', 'expression', ';', 'declaration']),\
