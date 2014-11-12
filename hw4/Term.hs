@@ -12,6 +12,9 @@ data Term =
   | Mult Term Term
 
 evaluate :: Term -> Integer
-evaluate _ = 0 -- Modify and complete for Problem 4.
+evaluate(Number x) = x
+evaluate(Plus x y) = evaluate(x) + evaluate(y)
+evaluate(Mult x y) = evaluate(x) * evaluate(y)
+evaluate(Abs x) = abs(evaluate(x))
 
 --eof

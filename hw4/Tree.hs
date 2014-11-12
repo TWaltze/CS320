@@ -28,27 +28,28 @@ perfect(Twig) = False
 perfect(Branch Leaf Leaf Leaf) = True
 perfect(Branch x y z) = perfect(x) && perfect(y) && perfect(z) && x == y && x == z
 
+-- degenerate(Leaf) = True
+-- degenerate(Twig) = True
+-- degenerate(Branch x y z) = (degenerate(x) && degenerate(y)) || (degenerate(x) && degenerate(z)) || (degenerate(y) && degenerate(z))
+
 degenerate(Leaf) = True
 degenerate(Twig) = True
-degenerate(Branch x y z) = (degenerate(x) && degenerate(y)) || (degenerate(x) && degenerate(z)) || (degenerate(y) && degenerate(z))
+degenerate(Branch Leaf Leaf x) = True && degenerate(x)
+degenerate(Branch Leaf Twig x) = True && degenerate(x)
+degenerate(Branch Twig Twig x) = True && degenerate(x)
+degenerate(Branch Twig Leaf x) = True && degenerate(x)
+degenerate(Branch Leaf x Leaf) = True && degenerate(x)
+degenerate(Branch Leaf x Twig) = True && degenerate(x)
+degenerate(Branch Twig x Twig) = True && degenerate(x)
+degenerate(Branch Twig x Leaf) = True && degenerate(x)
+degenerate(Branch x Leaf Leaf) = True && degenerate(x)
+degenerate(Branch x Leaf Twig) = True && degenerate(x)
+degenerate(Branch x Twig Twig) = True && degenerate(x)
+degenerate(Branch x Twig Leaf) = True && degenerate(x)
+degenerate(_) = False
 
---degenerate(Leaf) = True
---degenerate(Twig) = True
---degenerate(Branch Leaf Leaf x) = True && degenerate(x)
---degenerate(Branch Leaf Twig x) = True && degenerate(x)
---degenerate(Branch Twig Twig x) = True && degenerate(x)
---degenerate(Branch Twig Leaf x) = True && degenerate(x)
---degenerate(Branch Leaf x Leaf) = True && degenerate(x)
---degenerate(Branch Leaf x Twig) = True && degenerate(x)
---degenerate(Branch Twig x Twig) = True && degenerate(x)
---degenerate(Branch Twig x Leaf) = True && degenerate(x)
---degenerate(Branch x Leaf Leaf) = True && degenerate(x)
---degenerate(Branch x Leaf Twig) = True && degenerate(x)
---degenerate(Branch x Twig Twig) = True && degenerate(x)
---degenerate(Branch x Twig Leaf) = True && degenerate(x)
---degenerate(Branch x y z) = degenerate(x) && degenerate(y) && degenerate (z)
-
--- degenerate(Branch Leaf Leaf x) = (x == (Branch Tree Tree Tree) && degenerate(x)) || (x == Leaf || x == Twig)
+-- infinite(n) = [n] ++ infinite(n + 1)
+infinite = Branch infinite infinite infinite
 
 
 
