@@ -72,10 +72,61 @@ def unify(a, b):
 		return sub
 
 def build(m, d):
-	pass # Complete for Problem #2, part (a).
+	if type(d) == Node:
+		for label in d:
+			children = d[label]
+
+			name = children[0]["Variable"][0]
+			pattern = children[1]
+			expression = children[2]
+			rest = children[3]
+
+			t = (pattern, expression)
+
+			if name in m:
+				m[name] += [t]
+			else:
+				m.update({name: [t]})
+
+			return build(m, rest)
+	elif type(d) == Leaf:
+		if d == "End":
+			return m
 
 def evaluate(m, env, e):
-	pass # Complete for Problem #2, part (b).
+	print("m", m)
+	print("env", env)
+	print("e", e)
+	if type(e) == Node:
+		for label in e:
+			children = e[label]
+
+			if label == "Number":
+				return children[0]
+			elif label == "Plus":
+				left = children[0]
+				v1 = evaluate(m, env, left)
+
+				right = children[1]
+				v2 = evaluate(m, env, right)
+
+				return v1 + v2
+			elif label == "Apply":
+				name = children[0]["Variable"][0]
+				arg = children[1]
+
+			elif label == "Variable":
+				x = children[0]
+				if x in env:
+					return env[x]
+				else:
+					print(x + " is unbound.")
+					exit()
+	elif type(e) == Leaf:
+		if e == "True":
+			return True
+		if e == "False":
+			return False
 
 def interact(s):
 	# Build the module definition.
@@ -94,5 +145,7 @@ def interact(s):
 			print(evaluate(m, {}, e))
 		else:
 			print("Unknown input.")
+
+# print(build({}, parser(grammar, "declaration")("f(Node t1 t2) = Leaf; g(Leaf) = True; f(Leaf) = Leaf;")))
 
 #eof
