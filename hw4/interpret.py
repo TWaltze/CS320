@@ -21,17 +21,6 @@ def subst(s, a):
 		for label in a:
 			children = a[label]
 
-			# print(children)
-			# for child in children:
-			# 	if "Variable" in child:
-			# 		name = child["Variable"][0]
-
-			# 		if name in s:
-			# 			del child["Variable"]
-			# 			child.update(s[name])
-			# 	else:
-			# 		subst(s, child)
-
 			for child in children:
 				subst(s, child)
 
@@ -47,8 +36,11 @@ def unify(a, b):
 	if type(a) != Node: a = str(a)
 	if type(b) != Node: b = str(b)
 
-	if type(a) == Leaf and a == b:
-		return {}
+	if type(a) == Leaf and type(b) == Leaf:
+		if a == b:
+			return {}
+		else:
+			return None
 	if type(a) == Node and "Variable" in a:
 		name = a["Variable"][0]
 		return {name: b}
@@ -56,18 +48,19 @@ def unify(a, b):
 		name = b["Variable"][0]
 		return {name: a}
 	if aLabel == bLabel and len(a[aLabel]) == len(b[bLabel]):
-		sub = {}
-
-		# for label in a:
-		# 	children = a[label]
-		#
-		# 	for index in range(0, len(children)):
-		# 		sub.update(unify(children[index], b[label][index]))
-		#
-		# 	return sub
+		sub = None
 
 		for index in range(0, len(a[aLabel])):
-			sub.update(unify(a[aLabel][index], b[bLabel][index]))
+			u = unify(a[aLabel][index], b[bLabel][index])
+
+			# Found unification
+			if not u == None:
+				# initialize sub with found substition
+				if sub == None:
+					sub = u
+				# update sub with substition
+				else:
+					sub.update(u)
 
 		return sub
 
@@ -94,15 +87,20 @@ def build(m, d):
 			return m
 
 def evaluate(m, env, e):
-	print("m", m)
-	print("env", env)
-	print("e", e)
 	if type(e) == Node:
 		for label in e:
 			children = e[label]
 
 			if label == "Number":
 				return children[0]
+			elif label == "ConBase":
+				return e
+			elif label == "ConInd":
+				con = children[0]
+				arg1 = evaluate(m, env, children[1])
+				arg2 = evaluate(m, env, children[2])
+
+				return {"ConInd": [con, arg1, arg2]}
 			elif label == "Plus":
 				left = children[0]
 				v1 = evaluate(m, env, left)
@@ -113,7 +111,17 @@ def evaluate(m, env, e):
 				return v1 + v2
 			elif label == "Apply":
 				name = children[0]["Variable"][0]
-				arg = children[1]
+				arg = evaluate(m, env, children[1])
+
+				if name in m:
+					for item in m[name]:
+						sub = unify(arg, item[0])
+
+						# Returned a substition
+						if not sub == None:
+							env.update(sub)
+							return evaluate(m, env, item[1])
+
 
 			elif label == "Variable":
 				x = children[0]
@@ -145,7 +153,5 @@ def interact(s):
 			print(evaluate(m, {}, e))
 		else:
 			print("Unknown input.")
-
-# print(build({}, parser(grammar, "declaration")("f(Node t1 t2) = Leaf; g(Leaf) = True; f(Leaf) = Leaf;")))
 
 #eof
