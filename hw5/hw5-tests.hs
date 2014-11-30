@@ -3,8 +3,8 @@ module HW5Tests where
 import Allocation
 
 allTests = [
-  show (failed ordTests)
-  -- show (failed allocDepthFinalTests),
+  show (failed ordTests),
+  show (failed allocDepthFinalTests)
   -- show (failed greedyTests),
   -- show (failed patientTests),
   -- show (failed optimalTests),
@@ -27,13 +27,13 @@ ordTests = [
   (5, max (Finish (Alloc 9 1)) (Finish (Alloc 13 12)) == Finish (Alloc 9 1), True)
   ]
 
--- allocDepthFinalTests = [
---   (1, alloc (graph (Alloc 0 0) [2,5,6,2,5,4,1,6]), Alloc 0 0),
---   (2, alloc (Finish (Alloc 1 2)), Alloc 1 2),
---   (3, minimum (depth 3 (graph (Alloc 0 0) [2,5,6,2,5,4,1,6])), Alloc 7 6),
---   (4, maximum (final (graph (Alloc 0 0) [1,4,3,1,7,3,4,4])), Alloc 0 27),
---   (5, minimum (depth 5 (graph (Alloc 0 0) [1..])), Alloc 7 8)
---   ]
+allocDepthFinalTests = [
+  (1, alloc (graph (Alloc 0 0) [2,5,6,2,5,4,1,6]), Alloc 0 0),
+  (2, alloc (Finish (Alloc 1 2)), Alloc 1 2),
+  (3, minimum (depth 3 (graph (Alloc 0 0) [2,5,6,2,5,4,1,6])), Alloc 7 6),
+  (4, maximum (final (graph (Alloc 0 0) [1,4,3,1,7,3,4,4])), Alloc 0 27),
+  (5, minimum (depth 5 (graph (Alloc 0 0) [1..])), Alloc 7 8)
+  ]
 --
 -- greedyTests = [
 --   (1, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (graph (Alloc 3 0) [2,1])), 1),

@@ -19,7 +19,6 @@ data Graph =
 
 type Strategy = Graph -> Graph
 
-
 instance Ord Alloc where
     Alloc x y < Alloc a b = abs(x - y) < abs(a - b)
     Alloc x y <= Alloc a b = abs(x - y) <= abs(a - b)
@@ -27,6 +26,8 @@ instance Ord Alloc where
 instance Ord Graph where
      x < y = alloc x < alloc y
      x <= y = alloc x <= alloc y
+
+
 
 graph :: Alloc -> [Item] -> Graph
 graph (Alloc x y) items =
@@ -39,4 +40,21 @@ graph (Alloc x y) items =
 alloc :: Graph -> Alloc
 alloc (Branch (Alloc x y) _ _) = Alloc x y
 alloc (Finish (Alloc x y)) = Alloc x y
+
+
+final :: Graph -> [Alloc]
+final (Branch _ x y) = [] ++ final x ++ final y
+final (Finish (Alloc x y)) = [Alloc x y]
+
+depth :: Integer -> Graph -> [Alloc]
+depth level (Branch (Alloc x y) left right) =
+    if level == 0 then
+        [Alloc x y]
+    else
+        (depth (level - 1) left) ++ (depth (level - 1) right)
+depth level (Finish (Alloc x y)) =
+    if level == 0 then
+        [Alloc x y]
+    else
+        []
 --eof
