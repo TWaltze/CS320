@@ -94,4 +94,17 @@ patient level (Branch (Alloc x y) left right) = minimum (graphsAtDepth level (Br
 optimal :: Strategy
 optimal graph = Finish (minimum (final graph))
 
+metaCompose :: Strategy -> Strategy -> Strategy
+metaCompose s1 s2 (g) = s2( s1(g) )
+
+metaRepeat :: Integer -> Strategy -> Strategy
+metaRepeat count s (g) =
+    if count > 0 then
+        metaRepeat (count - 1) s (s(g))
+    else
+        g
+
+metaGreedy :: Strategy -> Strategy -> Strategy
+metaGreedy s1 s2 (g) = min (s1(g)) (s2(g))
+
 --eof

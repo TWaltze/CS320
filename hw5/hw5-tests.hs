@@ -7,8 +7,8 @@ allTests = [
   show (failed allocDepthFinalTests),
   show (failed greedyTests),
   show (failed patientTests),
-  show (failed optimalTests)
-  -- show (failed metaTests)
+  show (failed optimalTests),
+  show (failed metaTests)
   ]
 
 -- To get the failures for an individual test, query that
@@ -55,17 +55,17 @@ optimalTests = [
   (3, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,5,6,2,5,4,1,6])), 1),
   (4, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,5,6,2,5,4,1,6,2,4,1,4,1,6])), 1)
   ]
---
--- metaTests = [
---   (1, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 4 greedy (graph (Alloc 0 0) [1..])), 2),
---   (2, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 1000 greedy (graph (Alloc 0 0) [1..])), 500),
---   (3, (\(Alloc a b) -> abs(a-b)) $ alloc $ (patient 4) (graph (Alloc 0 0) [1,3,5,18,11]), 9),
---   (4, (\(Alloc a b) -> abs(a-b)) $ alloc (metaCompose (patient 2) (patient 2) (graph (Alloc 0 0) [1,3,5,18,11])), 11),
---   (5, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 4 (patient 2) (graph (Alloc 0 0) [1..8])), 0),
---   (6, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 500 (patient 2) (graph (Alloc 0 0) [1..])), 0),
---   (7, (\(Alloc a b) -> abs(a-b)) $ alloc (metaGreedy optimal (metaRepeat 5 greedy) (graph (Alloc 0 0) [2,1,3,2,1])), 1),
---   (8, (\(Alloc a b) -> abs(a-b)) $ alloc (metaGreedy optimal (metaRepeat 5 greedy) (graph (Alloc 0 0) [6,1,7,2,6])), 2),
---   (9, (\(Alloc a b) -> abs(a-b)) $ alloc (metaGreedy (patient 2) (metaRepeat 2 greedy) (graph (Alloc 0 0) [6,1,7,2,6])), 5)
---   ]
+
+metaTests = [
+  (1, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 4 greedy (graph (Alloc 0 0) [1..])), 2),
+  (2, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 1000 greedy (graph (Alloc 0 0) [1..])), 500),
+  (3, (\(Alloc a b) -> abs(a-b)) $ alloc $ (patient 4) (graph (Alloc 0 0) [1,3,5,18,11]), 9),
+  (4, (\(Alloc a b) -> abs(a-b)) $ alloc (metaCompose (patient 2) (patient 2) (graph (Alloc 0 0) [1,3,5,18,11])), 11),
+  (5, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 4 (patient 2) (graph (Alloc 0 0) [1..8])), 0),
+  (6, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 500 (patient 2) (graph (Alloc 0 0) [1..])), 0),
+  (7, (\(Alloc a b) -> abs(a-b)) $ alloc (metaGreedy optimal (metaRepeat 5 greedy) (graph (Alloc 0 0) [2,1,3,2,1])), 1),
+  (8, (\(Alloc a b) -> abs(a-b)) $ alloc (metaGreedy optimal (metaRepeat 5 greedy) (graph (Alloc 0 0) [6,1,7,2,6])), 2),
+  (9, (\(Alloc a b) -> abs(a-b)) $ alloc (metaGreedy (patient 2) (metaRepeat 2 greedy) (graph (Alloc 0 0) [6,1,7,2,6])), 5)
+  ]
 
 --eof
