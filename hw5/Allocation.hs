@@ -46,6 +46,7 @@ final :: Graph -> [Alloc]
 final (Branch _ x y) = [] ++ final x ++ final y
 final (Finish (Alloc x y)) = [Alloc x y]
 
+
 depth :: Integer -> Graph -> [Alloc]
 depth level (Branch (Alloc x y) left right) =
     if level == 0 then
@@ -57,4 +58,40 @@ depth level (Finish (Alloc x y)) =
         [Alloc x y]
     else
         []
+
+
+greedy :: Strategy
+greedy (Branch _ left right) = min left right
+
+-- allocTree :: Graph -> Alloc -> Graph
+-- allocTree (Branch a left right) target =
+--     if a == target then
+--         (Branch a left right)
+--     else if alloc (allocTree left target) == target then
+--         left
+--     else
+--         right
+-- allocTree (Finish (Alloc x y)) target = (Finish (Alloc x y))
+
+
+graphsAtDepth :: Integer -> Graph -> [Graph]
+graphsAtDepth level (Branch (Alloc x y) left right) =
+    if level == 0 then
+        [(Branch (Alloc x y) left right)]
+    else
+        (graphsAtDepth (level - 1) left) ++ (graphsAtDepth (level - 1) right)
+graphsAtDepth level (Finish (Alloc x y)) =
+    if level == 0 then
+        [(Finish (Alloc x y))]
+    else
+        []
+
+
+patient :: Integer -> Strategy
+patient level (Branch (Alloc x y) left right) = minimum (graphsAtDepth level (Branch (Alloc x y) left right))
+
+
+optimal :: Strategy
+optimal graph = Finish (minimum (final graph))
+
 --eof

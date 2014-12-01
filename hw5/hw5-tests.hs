@@ -4,10 +4,10 @@ import Allocation
 
 allTests = [
   show (failed ordTests),
-  show (failed allocDepthFinalTests)
-  -- show (failed greedyTests),
-  -- show (failed patientTests),
-  -- show (failed optimalTests),
+  show (failed allocDepthFinalTests),
+  show (failed greedyTests),
+  show (failed patientTests),
+  show (failed optimalTests)
   -- show (failed metaTests)
   ]
 
@@ -34,27 +34,27 @@ allocDepthFinalTests = [
   (4, maximum (final (graph (Alloc 0 0) [1,4,3,1,7,3,4,4])), Alloc 0 27),
   (5, minimum (depth 5 (graph (Alloc 0 0) [1..])), Alloc 7 8)
   ]
---
--- greedyTests = [
---   (1, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (graph (Alloc 3 0) [2,1])), 1),
---   (2, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (greedy (graph (Alloc 3 0) [1,2]))), 0),
---   (3, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (greedy (graph (Alloc 0 0) [5,2]))), 3),
---   (4, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (graph (Alloc 0 0) [10,12,13])), 10),
---   (5, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy $ greedy $ greedy $ greedy (graph (Alloc 0 0) [1..])), 2)
---   ]
---
--- patientTests = [
---   (1, (\(Alloc a b) -> abs(a-b)) $ alloc (patient 0 (graph (Alloc 3 0) [2])), 3),
---   (2, (\(Alloc a b) -> abs(a-b)) $ alloc (patient 4 (graph (Alloc 3 0) [2,1,3,2,1])), 1),
---   (3, (\(Alloc a b) -> abs(a-b)) $ alloc (patient 3 (graph (Alloc 0 0) [1,4,3])), 0)
---   ]
---
--- optimalTests = [
---   (1, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,1,3,2,1])), 1),
---   (2, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 9 0) [2,1,3,2,1])), 0),
---   (3, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,5,6,2,5,4,1,6])), 1),
---   (4, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,5,6,2,5,4,1,6,2,4,1,4,1,6])), 1)
---   ]
+
+greedyTests = [
+  (1, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (graph (Alloc 3 0) [2,1])), 1),
+  (2, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (greedy (graph (Alloc 3 0) [1,2]))), 0),
+  (3, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (greedy (graph (Alloc 0 0) [5,2]))), 3),
+  (4, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy (graph (Alloc 0 0) [10,12,13])), 10),
+  (5, (\(Alloc a b) -> abs(a-b)) $ alloc (greedy $ greedy $ greedy $ greedy (graph (Alloc 0 0) [1..])), 2)
+  ]
+
+patientTests = [
+  (1, (\(Alloc a b) -> abs(a-b)) $ alloc (patient 0 (graph (Alloc 3 0) [2])), 3),
+  (2, (\(Alloc a b) -> abs(a-b)) $ alloc (patient 4 (graph (Alloc 3 0) [2,1,3,2,1])), 1),
+  (3, (\(Alloc a b) -> abs(a-b)) $ alloc (patient 3 (graph (Alloc 0 0) [1,4,3])), 0)
+  ]
+
+optimalTests = [
+  (1, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,1,3,2,1])), 1),
+  (2, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 9 0) [2,1,3,2,1])), 0),
+  (3, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,5,6,2,5,4,1,6])), 1),
+  (4, (\(Alloc a b) -> abs(a-b)) $ alloc (optimal (graph (Alloc 0 0) [2,5,6,2,5,4,1,6,2,4,1,4,1,6])), 1)
+  ]
 --
 -- metaTests = [
 --   (1, (\(Alloc a b) -> abs(a-b)) $ alloc (metaRepeat 4 greedy (graph (Alloc 0 0) [1..])), 2),
