@@ -107,4 +107,19 @@ metaRepeat count s (g) =
 metaGreedy :: Strategy -> Strategy -> Strategy
 metaGreedy s1 s2 (g) = min (s1(g)) (s2(g))
 
+{----------------------------------------------------
+Problem 3g:
+impatient :: Integer -> Strategy
+impatient n g = (metaRepeat n greedy) g
+
+Superior: This is faster than patient.
+Its runtime is O(n). To traverse from top to bottom,
+it would take O(d), where d is the total depth
+of the graph.
+
+Inferior: Because impatient doesn't look ahead,
+it's possible it will miss a superior bin allocation
+that is further down in the graph.
+----------------------------------------------------}
+
 --eof
