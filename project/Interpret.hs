@@ -23,6 +23,10 @@ exec env (Assign x e s) =
 exec env _ = (env, [])
 
 interpret :: Stmt -> Maybe Output
-interpret _ = Nothing -- Implement for Problem #1, part (d).
+interpret s =
+    if fromJust (chk [] s) == Void then
+        let (env, o) = exec [] s
+        in Just o
+    else Nothing
 
 -- eof
