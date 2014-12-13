@@ -26,6 +26,18 @@ instance Parseable Exp where
                   let Just (e2, ts) = r
                   in if ts!!0 /= ")" then Nothing else
                       Just (And e1 e2, tail ts)
+
+    else if t == "or" && length ts > 0 && ts!!0 == "(" then
+      let r = parse (tail ts)
+      in if r == Nothing then Nothing else
+          let Just (e1, ts) = r
+          in if length ts == 0 || ts!!0 /= "," then Nothing else
+              let r = parse (tail ts)
+              in if r == Nothing then Nothing else
+                  let Just (e2, ts) = r
+                  in if ts!!0 /= ")" then Nothing else
+                      Just (Or e1 e2, tail ts)
+
     else if t == "not" && length ts > 0 && ts!!0 == "(" then
       let r = parse (tail ts)
       in if r == Nothing then Nothing else
@@ -34,6 +46,8 @@ instance Parseable Exp where
               Just (Not e, tail ts)
     else if t == "true" then
       Just (Value True, ts)
+    else if t == "false" then
+      Just (Value False, ts)
     else if subset t "abcdefghijklmnopqrstuvwxyz" then
       Just (Variable t, ts)
     else
