@@ -54,6 +54,14 @@ instance Parseable Stmt where
           in if r' == Nothing || ts!!0 /= ";" then Nothing else
               let Just (s, ts) = r'
               in Just (Assign x e s, ts)
+    else if t == "print" && length ts > 1 then
+        let r = parse (ts)
+        in if r == Nothing then Nothing else
+          let Just (e, ts) = r
+              r' = parse (tail ts)
+          in if r' == Nothing || ts!!0 /= ";" then Nothing else
+              let Just (s, ts) = r'
+              in Just (Print e s, ts)
     else
       Nothing
   parse _ = Nothing
@@ -71,8 +79,9 @@ subset xs ys = and [x `elem` ys | x <- xs]
 
 -- Example of a concrete syntax string being parsed.
 example = fst $ (\(Just x)->x) $ parse (tokenize "assign x := not(and(true, false)); print x; assign a := not(and(x, x)); print a; end;") :: Stmt
+example' = fst $ (\(Just x)->x) $ parse (tokenize "assign x := true; print x; print a; end;") :: Stmt
 
 -- Problem 1, part (a).
-kindOfParser = "???" -- "backtracking" or "predictive"
+kindOfParser = "predictive" -- "backtracking" or "predictive"
 
 -- eof

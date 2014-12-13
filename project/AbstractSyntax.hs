@@ -50,11 +50,11 @@ instance Foldable Exp where
   fold f var b (Not   e    ) = f [fold f var b e]
 
 instance Foldable Stmt where
-  fold f var b (Print    e s) = ??? -- Finish this definition for Problem #2, part (a).
-  fold f var b _              = ???
+  fold f var b (Print    e s) = b -- Finish this definition for Problem #2, part (a).
+  fold f var b _              = b
   fold f var b (End)          = b
 
-  
+
 
 class HasVariables a where
   vars :: a -> [Var]
