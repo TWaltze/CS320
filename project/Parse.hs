@@ -94,6 +94,7 @@ subset xs ys = and [x `elem` ys | x <- xs]
 -- Example of a concrete syntax string being parsed.
 example = fst $ (\(Just x)->x) $ parse (tokenize "assign x := not(and(true, false)); print x; assign a := not(or(x, x)); print a; end;") :: Stmt
 example' = fst $ (\(Just x)->x) $ parse (tokenize "assign x := true; print x; print a; end;") :: Stmt
+example'' = fst $ (\(Just x)->x) $ parse (tokenize "print x; assign a := true; print a; end;") :: Stmt
 
 -- vars (Assign ("x") (Value True) (Print (And (Variable "y") (Variable "z") ) (End)))
 

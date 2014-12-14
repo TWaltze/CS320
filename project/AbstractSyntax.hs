@@ -71,9 +71,24 @@ instance HasVariables Exp where
 
 
 unbound :: Stmt -> [Var]
-unbound _ = [] -- Implement for Problem #2, part (b).
+unbound (Print e s) = (vars e) `union` (unbound s)
+unbound (Assign x e s) = (vars e) `union` ((unbound s) \\ [x])
+unbound (End) = []
 
-
+-- Print (Variable "x") (Assign "a" (Value True) (Print (Variable "a") End))
+{--
+[x] `union` [] = [x]
+Print (Variable "x") => [x]
+    [x]
+Assign "a" (Value True) (Print (Variable "a") End) => [] `union` ([a] \\ [a]) = []
+    (Value True) => []
+        []
+    (Print (Variable "a") End) => [a] `union` [] = [a]
+        (Variable "a")
+            [a]
+        End
+            []
+--}
 
 type Interference = [(Var, Var)]
 
