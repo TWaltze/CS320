@@ -95,6 +95,8 @@ subset xs ys = and [x `elem` ys | x <- xs]
 example = fst $ (\(Just x)->x) $ parse (tokenize "assign x := not(and(true, false)); print x; assign a := not(or(x, x)); print a; end;") :: Stmt
 example' = fst $ (\(Just x)->x) $ parse (tokenize "assign x := true; print x; print a; end;") :: Stmt
 
+-- vars (Assign ("x") (Value True) (Print (And (Variable "y") (Variable "z") ) (End)))
+
 -- Problem 1, part (a).
 kindOfParser = "predictive" -- "backtracking" or "predictive"
 
