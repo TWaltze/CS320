@@ -28,6 +28,9 @@ data Type =
 lookup' :: Eq a => a -> [(a, b)] -> b
 lookup' x ((x',i) : rest) = if x == x' then i else lookup' x rest
 
+addOrReplace :: Eq a => a -> b -> [(a, b)] -> [(a, b)]
+addOrReplace key value assoc = (key, value):(filter ((key /=).fst) assoc)
+
 -- Type class for a polymorphic fold function on abstract syntax trees.
 --
 --  * The first argument is the aggregator for combining

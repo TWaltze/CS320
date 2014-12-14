@@ -17,7 +17,7 @@ exec env (Print    e s) =
   in (env', [eval env e] ++ o)
 exec env (Assign x e s) =
     let v = eval env e
-        env' = env ++ [(x, v)]
+        env' = addOrReplace x v env
         (env'', o) = exec env' s
     in (env'', o)
 exec env _ = (env, [])
