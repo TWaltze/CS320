@@ -13,21 +13,27 @@ foldTree :: ([a] -> a) -> Tree a -> a
 foldTree f (Branch x ts) = f [x, f [foldTree f t | t <- ts]]
 foldTree f (Finish x) = x
 
--- foldTree sum (Branch 1 [Branch 2 [Finish 3],Branch 4 [Finish 5]])
--- (sum [1, sum [2, 3], sum [4, 5]])
+-- foldTree sum (Branch 1 [Branch 2 [Finish 3], Branch 4 [Finish 5]])
+-- (sum [1, sum [2, sum [3]], sum [4, sum [5]]])
 
--- smallest :: Ord a => Tree a -> a
--- smallest t = ??? -- Complete for Problem #3, part (b).
---
--- largest :: Ord a => Tree a -> a
--- largest t = ??? -- Complete for Problem #3, part (b).
+smallest :: Ord a => Tree a -> a
+smallest (Branch x ts) = minimum [foldTree minimum t | t <- ts]
+smallest (Finish x) = x
+
+-- (Branch [("d",5)] [Finish [("a",1), ("b",1)], Finish [("x",3), ("y",2)]])
+-- f [ [("d",5)], f [ [("a",1), ("b",1)], [("x",3), ("y",2)] ] ]
+
+largest :: Ord a => Tree a -> a
+largest (Branch x ts) = maximum [foldTree maximum t | t <- ts]
+largest (Finish x) = x
 
 data Allocation =
     Alloc [(Var, Register)]
   deriving (Eq, Show)
 
-
 -- Add instance declaration for Problem #3, part (c) here.
+instance Ord Allocation where
+    Alloc a <= Alloc b = length (nub [y | (x, y) <- a]) <= length (nub [y | (x, y) <- b])
 
 
 -- allocations :: (Interference, [Register]) -> Allocation -> [Var] -> Tree Allocation
