@@ -93,7 +93,8 @@ Assign "a" (Value True) (Print (Variable "a") End) => [] `union` ([a] \\ [a]) = 
 type Interference = [(Var, Var)]
 
 interference :: Stmt -> Interference
-interference _ = [] -- Implement for Problem #2, part (c).
-
+interference (Print e s) = interference s
+interference (Assign x e s) = interference s ++ ([(x, y) | y <- (vars e) `union` (unbound s), y /= x])
+interference (End) = []
 
 -- eof
