@@ -1,0 +1,97 @@
+allocations ([("z", "y"), ("x","y"), ("x", "z")],[Register 1, Register 2, Register 3]) (Alloc []) ["x","y", "z"]
+
+
+Branch (Alloc []) [
+    Branch (Alloc [("x", Register 1)]) [
+        Branch (Alloc [("x", Register 1), ("y", Register 2)]) [
+            Finish (Alloc [("x", Register 1), ("y", Register 2), ("z", Register 3)])
+        ], Branch (Alloc [("x",Register 1), ("y", Register 3)]) [
+            Finish (Alloc [("x", Register 1), ("y", Register 3), ("z", Register 2)])
+        ]
+    ], Branch (Alloc [("x",Register 2)]) [
+        Branch (Alloc [("x",Register 2),("y",Register 1)]) [
+            Finish (Alloc [("x",Register 2),("y",Register 1),("z",Register 3)])
+        ], Branch (Alloc [("x",Register 2),("y",Register 3)]) [
+            Finish (Alloc [("x",Register 2),("y",Register 3),("z",Register 1)])
+        ]
+    ], Branch (Alloc [("x",Register 3)]) [
+        Branch (Alloc [("x",Register 3),("y",Register 1)]) [
+            Finish (Alloc [("x",Register 3),("y",Register 1),("z",Register 2)])
+        ], Branch (Alloc [("x",Register 3),("y",Register 2)]) [
+            Finish (Alloc [("x",Register 3),("y",Register 2),("z",Register 1)])
+        ]
+    ]
+]
+
+
+
+Branch (Alloc []) [
+    Branch (Alloc [("x",Register 1)]) [
+        Branch (Alloc [("x",Register 1),("y",Register 2)]) [
+            Finish (Alloc [("x",Register 1),("y",Register 2),("z",Register 3),("a",Register 4)]),
+            Finish (Alloc [("x",Register 1),("y",Register 2),("z",Register 4),("a",Register 3)])
+        ],Branch (Alloc [("x",Register 1),("y",Register 3)]) [
+            Finish (Alloc [("x",Register 1),("y",Register 3),("z",Register 2),("a",Register 4)]),
+            Finish (Alloc [("x",Register 1),("y",Register 3),("z",Register 4),("a",Register 2)])
+        ],Branch (Alloc [("x",Register 1),("y",Register 4)]) [
+            Finish (Alloc [("x",Register 1),("y",Register 4),("z",Register 2),("a",Register 3)]),
+            Finish (Alloc [("x",Register 1),("y",Register 4),("z",Register 3),("a",Register 2)])
+        ]
+    ],Branch (Alloc [("x",Register 2)]) [Branch (Alloc [("x",Register 2),("y",Register 1)]) [Finish (Alloc [("x",Register 2),("y",Register 1),("z",Register 3),("a",Register 4)]),Finish (Alloc [("x",Register 2),("y",Register 1),("z",Register 4),("a",Register 3)])],Branch (Alloc [("x",Register 2),("y",Register 3)]) [Finish (Alloc [("x",Register 2),("y",Register 3),("z",Register 1),("a",Register 4)]),Finish (Alloc [("x",Register 2),("y",Register 3),("z",Register 4),("a",Register 1)])],Branch (Alloc [("x",Register 2),("y",Register 4)]) [Finish (Alloc [("x",Register 2),("y",Register 4),("z",Register 1),("a",Register 3)]),Finish (Alloc [("x",Register 2),("y",Register 4),("z",Register 3),("a",Register 1)])]],Branch (Alloc [("x",Register 3)]) [Branch (Alloc [("x",Register 3),("y",Register 1)]) [Finish (Alloc [("x",Register 3),("y",Register 1),("z",Register 2),("a",Register 4)]),Finish (Alloc [("x",Register 3),("y",Register 1),("z",Register 4),("a",Register 2)])],Branch (Alloc [("x",Register 3),("y",Register 2)]) [Finish (Alloc [("x",Register 3),("y",Register 2),("z",Register 1),("a",Register 4)]),Finish (Alloc [("x",Register 3),("y",Register 2),("z",Register 4),("a",Register 1)])],Branch (Alloc [("x",Register 3),("y",Register 4)]) [Finish (Alloc [("x",Register 3),("y",Register 4),("z",Register 1),("a",Register 2)]),Finish (Alloc [("x",Register 3),("y",Register 4),("z",Register 2),("a",Register 1)])]],Branch (Alloc [("x",Register 4)]) [Branch (Alloc [("x",Register 4),("y",Register 1)]) [Finish (Alloc [("x",Register 4),("y",Register 1),("z",Register 2),("a",Register 3)]),Finish (Alloc [("x",Register 4),("y",Register 1),("z",Register 3),("a",Register 2)])],Branch (Alloc [("x",Register 4),("y",Register 2)]) [Finish (Alloc [("x",Register 4),("y",Register 2),("z",Register 1),("a",Register 3)]),Finish (Alloc [("x",Register 4),("y",Register 2),("z",Register 3),("a",Register 1)])],Branch (Alloc [("x",Register 4),("y",Register 3)]) [Finish (Alloc [("x",Register 4),("y",Register 3),("z",Register 1),("a",Register 2)]),Finish (Alloc [("x",Register 4),("y",Register 3),("z",Register 2),("a",Register 1)])]]]
+
+
+
+
+
+Branch (Alloc []) [
+    Branch (Alloc [("x",Register 1)]) [
+        Finish (Alloc [("x",Register 1),("y",Register 2),("z",Register 3)]),
+        Finish (Alloc [("x",Register 1),("y",Register 3),("z",Register 2)])
+    ], Branch (Alloc [("x",Register 2)]) [
+        Finish (Alloc [("x",Register 2),("y",Register 1),("z",Register 3)]),
+        Finish (Alloc [("x",Register 2),("y",Register 3),("z",Register 1)])
+    ], Branch (Alloc [("x",Register 3)]) [
+        Finish (Alloc [("x",Register 3),("y",Register 1),("z",Register 2)]),
+        Finish (Alloc [("x",Register 3),("y",Register 2),("z",Register 1)])
+    ]
+]
+
+
+
+
+Branch (Alloc []) [
+    Branch (Alloc [("x",Register 1)]) [
+        Finish (Alloc [("x",Register 1),("y",Register 2),("z",Register 3)]),
+        Finish (Alloc [("x",Register 1),("y",Register 3),("z",Register 3)])
+    ],Branch (Alloc [("x",Register 2)]) [
+        Finish (Alloc [("x",Register 2),("y",Register 2),("z",Register 3)]),
+        Finish (Alloc [("x",Register 2),("y",Register 3),("z",Register 3)])
+    ],Branch (Alloc [("x",Register 3)]) [
+        Finish (Alloc [("x",Register 3),("y",Register 2),("z",Register 3)]),
+        Finish (Alloc [("x",Register 3),("y",Register 3),("z",Register 3)])
+    ]
+]
+
+
+
+
+
+
+
+
+Branch (Alloc []) [
+    Branch (Alloc [("x", Register 1)]) [
+        Finish (Alloc [("x", Register 1), ("y", Register 2), ("z", Register 3)])
+    ]
+]
+
+
+
+
+
+
+Branch (Alloc [("x", Register 1)]) [
+    Branch (Alloc [("x", Register 1), ("y", Register 2)]) [
+        Finish (Alloc [("x", Register 1), ("y", Register 2), ("z", Register 3)])
+    ]
+]
