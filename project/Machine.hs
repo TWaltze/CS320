@@ -7,7 +7,12 @@ data Register =
   deriving (Eq, Show)
 
 
--- Add instance declarations here for Problem #4, part (a).  
+-- Add instance declarations here for Problem #4, part (a).
+instance Num Register where
+    (Register a) + (b) = Register a + b
+
+instance Ord Register where
+    Register a <= Register b = a <= b
 
 
 data Instruction =

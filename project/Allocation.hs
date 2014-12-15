@@ -37,10 +37,16 @@ instance Ord Allocation where
 
 
 -- allocations :: (Interference, [Register]) -> Allocation -> [Var] -> Tree Allocation
--- allocations (conflicts, rs) (Alloc a) (x:xs) = ??? -- Complete for Problem #3, part (d).
+allocations (conflicts, rs) (Alloc a) (x:[]) = Finish (Alloc (a ++ [(x, rs!!0)]))
+allocations (conflicts, rs) (Alloc a) (x:xs) =
+    Branch
+    (Alloc a)
+    ( [allocations (conflicts, (rs \\ [r])) (Alloc (a ++ [(x, r)])) xs | r <- rs] )
 
 -- Useful helper function.
 unconflicted ::(Interference, [Register]) -> Allocation -> Var -> [Register]
 unconflicted (conflicts, rs) (Alloc a) x = rs \\ [r | (y,r) <- a, (x,y) `elem` conflicts || (y,x) `elem` conflicts]
+
+
 
 --eof
