@@ -8,7 +8,10 @@ data Register =
 
 
 -- Add instance declarations here for Problem #4, part (a).
-(++++) (Register a) b = Register (a + b)
+instance Num Register where
+    fromInteger n = Register n
+    (Register x) + (Register y) = Register (x + y)
+    (Register x) - (Register y) = Register (x - y)
 
 instance Ord Register where
     Register a <= Register b = a <= b
