@@ -10,7 +10,7 @@ data Tree a =
   deriving (Eq, Show)
 
 foldTree :: ([a] -> a) -> Tree a -> a
-foldTree f (Branch x ts) = f [x, f [foldTree f t | t <- ts]]
+foldTree f (Branch x ts) = f [f [foldTree f t | t <- ts]]
 foldTree f (Finish x) = x
 
 -- foldTree sum (Branch 1 [Branch 2 [Finish 3], Branch 4 [Finish 5]])
