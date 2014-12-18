@@ -24,7 +24,8 @@ exec env _ = (env, [])
 
 interpret :: Stmt -> Maybe Output
 interpret s =
-    if isJust (chk [] s) && fromJust (chk [] s) == Void then
+    let v = chk [] s
+    in if isJust (v) && fromJust (v) == Void then
         let (env, o) = exec [] s
         in Just o
     else Nothing
