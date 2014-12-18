@@ -45,16 +45,17 @@ instance Compilable Exp where
             (NAND r1 r2 (r2 + 1)
             (FLIP (r2 + 1)
             (STOP (r2 + 1))))
-    -- comp xrs (Or e1 e2) =
-    --     let expression1 = comp xrs e1
-    --         expression2 = comp xrs e2
-    --         r1 = result expression1
-    --         r2 = result expression2
-    --     in  expression1 +++
-    --         expression2 +++
-    --         (NAND r1 r2 (r2 + 1)
-    --         (FLIP (r2 + 1)
-    --         (STOP (r2 + 1))))
+    comp xrs (Or e1 e2) =
+        let expression1 = comp xrs e1
+            expression2 = comp xrs e2
+            r1 = result expression1
+            r2 = result expression2
+        in  expression1 +++
+            expression2 +++
+            (NAND r1 r1 (r2 + 1)
+            (NAND r2 r2 (r2 + 2)
+            (NAND (r2 + 1) (r2 + 2) (r2 + 3)
+            (STOP (r2 + 3)))))
 
 
 topOfStack :: [(Var, Register)] -> Register
