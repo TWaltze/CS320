@@ -23,7 +23,10 @@ instance Typeable Exp where
         if fromJust (chk env e) == Bool then
             Just Bool
         else Nothing
-    chk env (Variable x) = Just (lookup' x env)
+    chk env (Variable x) =
+        if length [v | (y, v) <- env, x == y]  > 0 then
+            Just (lookup' x env)
+        else Nothing
 
 instance Typeable Stmt where
     chk env (End) = Just Void
