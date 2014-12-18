@@ -29,4 +29,11 @@ interpret s =
         in Just o
     else Nothing
 
+-- Answer to 1d:
+--
+-- There is no need to check for unbound variables and other problems
+-- because all errors will be caught with type checking. For example,
+-- an unbound varible will not be properly typed, and thus would
+-- return Nothing and never be passed to exec or eval.
+
 -- eof
